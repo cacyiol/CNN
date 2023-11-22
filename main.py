@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
-
+import json
 def load_and_preprocess_data():
     # 读取训练集数据
     train = pd.read_csv('Train/train.csv')
@@ -120,20 +120,30 @@ def test():
     print(f'Predictions for all test images: {predictions}')
 
 
+
+
 def testSingle():
-    # 加载
+    # 加载最佳模型
     best_model = load_model('best_model.h5')
+
     # 选择一张测试图像进行单张预测
     # test_img_path = 'samplePhotos/pants.png'  # 替换成实际的图像路径
-    test_img_path = 'samplePhotos/T-shirts.png'
+    test_img_path = 'samplePhotos/waitao.png'
     predicted_label = predict_single_image(best_model, test_img_path)
 
-    print(f'The predicted label for the example image is: {predicted_label}')
+    # 加载标签映射文件
+    with open('label_mapping.json', 'r', encoding='utf-8') as f:
+        label_mapping = json.load(f)
+
+    # 获取预测标签对应的服饰名
+    predicted_category = label_mapping.get(str(predicted_label), '未知')
+
+    print(f'The predicted category for the example image is: {predicted_category}')
 
 def main():
     # train()  # 训练模型
-    test()   # 测试模型
-    # testSingle()   # 预测单张图片
+    # test()   # 测试模型
+    testSingle()   # 预测单张图片
 
 if __name__ == "__main__":
     main()
