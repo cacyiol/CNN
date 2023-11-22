@@ -54,7 +54,7 @@ def build_and_train_model(X_train, y_train, X_test, y_test):
     checkpoint = ModelCheckpoint('best_model.h5', monitor='val_accuracy', save_best_only=True, mode='max', verbose=1, patience=3)
 
     # 训练模型
-    model.fit(X_train, y_train, epochs=20, validation_data=(X_test, y_test), callbacks=[checkpoint])
+    model.fit(X_train, y_train, epochs=50, validation_data=(X_test, y_test), callbacks=[checkpoint])
 
     # 计算最终准确率
     _, accuracy = model.evaluate(X_test, y_test)
@@ -141,20 +141,10 @@ def testSingle():
     print(f'The predicted category for the example image is: {predicted_category}')
 
 def main():
-    # train()  # 训练模型
+    train()  # 训练模型
     # test()   # 测试模型
-    testSingle()   # 预测单张图片
+    # testSingle()   # 预测单张图片
 
 if __name__ == "__main__":
     main()
-# T-shirts 0
-# 裤子 1
-# 长袖 2
-# shirt 3裙子？
-# waitao 4
-# gaogenxie 5
-# 6
-# 7  6跟7看不出来是啥
-# 8 bag
-# shoes 9
 
