@@ -86,7 +86,9 @@ def load_and_preprocess_test_data():
 
     return test_data
 
-def predict_single_image(model, img_path):
+
+
+def predict_single_image(model, img_path, unknown_threshold=0.5):
     img = image.load_img(img_path, target_size=(28, 28, 3))
     img_array = image.img_to_array(img)
     img_array = img_array / 255
@@ -95,6 +97,13 @@ def predict_single_image(model, img_path):
     # 进行预测
     prediction = model.predict(img_array)
     predicted_label = np.argmax(prediction)
+
+    # 获取对应标签的概率
+    predicted_probabilities = prediction[0]
+
+    # 判断是否为未知
+    if all(prob < unknown_threshold for prob in predicted_probabilities):
+        predicted_label = -1  # -1 表示未知
 
     return predicted_label
 
@@ -127,8 +136,8 @@ def testSingle():
     best_model = load_model('best_model.h5')
 
     # 选择一张测试图像进行单张预测
-    # test_img_path = 'samplePhotos/pants.png'  # 替换成实际的图像路径
-    test_img_path = 'samplePhotos/waitao.png'
+    # test_img_path = 'samplePhotos/waitao.png'  # 替换成实际的图像路径
+    test_img_path = 'samplePhotos/none.png' # 无关图片测试
     predicted_label = predict_single_image(best_model, test_img_path)
 
     # 加载标签映射文件
@@ -140,10 +149,13 @@ def testSingle():
 
     print(f'The predicted category for the example image is: {predicted_category}')
 
+
+
+
 def main():
-    train()  # 训练模型
+    # train()  # 训练模型
     # test()   # 测试模型
-    # testSingle()   # 预测单张图片
+    testSingle()   # 预测单张图片
 
 if __name__ == "__main__":
     main()
